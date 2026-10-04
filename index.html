@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Намуун ХХК-ийн байгууллагын орчин, SWOT ба стратегийн шинжилгээ" />
+  <title>Намуун ХХК — Стратегийн шинжилгээ</title>
+  <style>
+    :root {
+      --ink: #10233f;
+      --muted: #5f6f84;
+      --paper: #f7f9fc;
+      --white: #ffffff;
+      --blue: #1557c0;
+      --blue-2: #2d7ff9;
+      --sky: #eaf3ff;
+      --navy: #09244b;
+      --green: #0f8b6d;
+      --green-soft: #e8f7f2;
+      --orange: #e9822b;
+      --orange-soft: #fff1e4;
+      --red: #c94a5a;
+      --red-soft: #ffedf0;
+      --purple: #7657d6;
+      --line: #dbe4f0;
+      --shadow: 0 18px 60px rgba(13, 39, 78, 0.14);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: #dfe8f4;
+      color: var(--ink);
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+    }
+
+    button { font: inherit; }
+
+    .deck {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      isolation: isolate;
+    }
+
+    .deck::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(45,127,249,.20), transparent 28%),
+        radial-gradient(circle at 90% 90%, rgba(15,139,109,.13), transparent 30%),
+        linear-gradient(135deg, #eef4fb 0%, #dce8f6 100%);
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 18px;
+      padding: clamp(26px, 3.6vw, 62px) clamp(30px, 5.4vw, 94px) clamp(72px, 7vw, 98px);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateX(42px) scale(.985);
+      transition: opacity .4s ease, transform .55s cubic-bezier(.2,.8,.2,1), visibility .4s;
+      background: rgba(255,255,255,.90);
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(0) scale(1);
+      z-index: 2;
+    }
+
+    .slide.leaving-left { transform: translateX(-42px) scale(.985); }
+
+    .slide::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: min(36vw, 520px);
+      height: 9px;
+      background: linear-gradient(90deg, var(--blue-2), var(--green));
+      border-radius: 0 0 0 9px;
+    }
+
+    .slide-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 24px;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--blue);
+      font-size: clamp(11px, .9vw, 15px);
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+
+    h1 {
+      margin-bottom: 16px;
+      font-size: clamp(44px, 6.5vw, 106px);
+      line-height: .95;
+      letter-spacing: -.055em;
+    }
+
+    h2 {
+      margin-bottom: 0;
+      font-size: clamp(30px, 4vw, 64px);
+      line-height: 1.02;
+      letter-spacing: -.04em;
+    }
+
+    h3 {
+      margin-bottom: 10px;
+      font-size: clamp(17px, 1.55vw, 25px);
+      line-height: 1.15;
+    }
+
+    .lead {
+      color: var(--muted);
+      font-size: clamp(16px, 1.55vw, 25px);
+      line-height: 1.5;
+      max-width: 830px;
+    }
+
+    .slide-number {
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      width: 46px;
+      height: 46px;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      color: var(--muted);
+      font-weight: 800;
+      font-size: 14px;
+      background: rgba(255,255,255,.72);
+    }
+
+    .content {
+      min-height: 0;
+      align-self: center;
+      width: 100%;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      color: var(--navy);
+    }
+
+    .brand-mark {
+      display: grid;
+      grid-template-columns: repeat(2, 9px);
+      grid-template-rows: repeat(2, 9px);
+      gap: 3px;
+      transform: skewX(-12deg);
+    }
+
+    .brand-mark i { background: var(--blue); border-radius: 2px; }
+    .brand-mark i:nth-child(4) { background: var(--green); }
+
+    .footer-tag {
+      position: absolute;
+      left: clamp(30px, 5.4vw, 94px);
+      bottom: 28px;
+      color: #7c8ca1;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .04em;
+    }
+
+    .hero {
+      background:
+        linear-gradient(112deg, rgba(8,32,68,.97) 0%, rgba(12,54,110,.96) 55%, rgba(21,87,192,.87) 100%),
+        #0b2d5f;
+      color: white;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      right: -13vw;
+      top: -28vh;
+      width: 70vw;
+      height: 120vh;
+      border: 1px solid rgba(255,255,255,.11);
+      border-radius: 50%;
+      box-shadow:
+        0 0 0 80px rgba(255,255,255,.035),
+        0 0 0 160px rgba(255,255,255,.025),
+        0 0 0 240px rgba(255,255,255,.02);
+    }
+
+    .hero::after { background: linear-gradient(90deg, #62a0ff, #3dd6ac); }
+    .hero .eyebrow { color: #8ebcff; }
+    .hero .lead { color: #d7e7ff; }
+    .hero .slide-number { color: white; border-color: rgba(255,255,255,.25); background: rgba(255,255,255,.08); }
+    .hero .brand { color: white; }
+    .hero .brand-mark i { background: #7cb0ff; }
+    .hero .brand-mark i:nth-child(4) { background: #45dab4; }
+    .hero .footer-tag { color: #9eb9dd; }
+
+    .hero-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(290px, .8fr);
+      align-items: center;
+      gap: clamp(40px, 8vw, 140px);
+    }
+
+    .hero h1 span { display: block; color: #79aefe; }
+
+    .hero-card {
+      position: relative;
+      padding: clamp(25px, 3vw, 46px);
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 28px;
+      background: rgba(255,255,255,.08);
+      box-shadow: 0 30px 90px rgba(0,0,0,.22);
+      backdrop-filter: blur(12px);
+    }
+
+    .hero-card::before {
+      content: "SWOT";
+      display: block;
+      margin-bottom: 20px;
+      color: #6fe1c4;
+      font-weight: 900;
+      letter-spacing: .25em;
+      font-size: 13px;
+    }
+
+    .hero-card strong {
+      display: block;
+      margin-bottom: 12px;
+      font-size: clamp(24px, 3vw, 46px);
+      line-height: 1.05;
+    }
+
+    .hero-card p { margin: 0; color: #c6d9f5; line-height: 1.6; }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+    .chip {
+      padding: 9px 13px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.1);
+      color: #e7f0ff;
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 20px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 20px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 16px; }
+
+    .card {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(18px, 2vw, 30px);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.86);
+      box-shadow: 0 10px 28px rgba(13,39,78,.065);
+    }
+
+    .card p:last-child, .card ul:last-child { margin-bottom: 0; }
+    .card p { color: var(--muted); line-height: 1.5; }
+
+    .icon {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      margin-bottom: 17px;
+      border-radius: 13px;
+      background: var(--sky);
+      color: var(--blue);
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .fact-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+    .fact-card { min-height: 185px; }
+    .fact-card .metric {
+      display: block;
+      margin: 12px 0 6px;
+      color: var(--blue);
+      font-size: clamp(32px, 4vw, 58px);
+      font-weight: 900;
+      letter-spacing: -.045em;
+    }
+    .fact-card p { font-size: clamp(13px, 1.05vw, 17px); }
+
+    .diagnosis-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .diagnosis-card { min-height: 250px; }
+    .diagnosis-card small {
+      display: block;
+      margin-bottom: 13px;
+      color: var(--blue);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .diagnosis-card .compact-list { grid-template-columns: 1fr; gap: 9px; color: var(--muted); }
+    .diagnosis-card:nth-child(2) { background: var(--orange-soft); border-color: #f3d8bf; }
+    .diagnosis-card:nth-child(3) { background: var(--red-soft); border-color: #f0cad1; }
+    .diagnosis-card:nth-child(4) { background: var(--green-soft); border-color: #c7e9de; }
+    .thesis {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 17px 22px;
+      border-radius: 16px;
+      color: white;
+      background: linear-gradient(90deg, var(--navy), var(--blue));
+    }
+    .thesis b { flex: 0 0 auto; color: #73e2c4; }
+    .thesis p { margin: 0; color: #e1ecfc; line-height: 1.45; }
+
+    .pestel-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .pestel-card { min-height: 190px; padding: 20px; }
+    .pestel-card .factor {
+      display: inline-grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      color: white;
+      background: var(--blue);
+      font-weight: 900;
+    }
+    .pestel-card h3 { margin-bottom: 7px; font-size: 18px; }
+    .pestel-card p { margin-bottom: 13px; font-size: 13px; }
+    .impact {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 9px;
+      border-radius: 999px;
+      color: var(--green);
+      background: var(--green-soft);
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+    .impact.risk { color: var(--red); background: var(--red-soft); }
+    .impact.mixed { color: var(--orange); background: var(--orange-soft); }
+
+    .priority-layout {
+      display: grid;
+      grid-template-columns: .85fr 1.15fr;
+      gap: 22px;
+    }
+    .priority-list { display: grid; gap: 10px; }
+    .priority-item {
+      display: grid;
+      grid-template-columns: 28px 1fr auto;
+      gap: 11px;
+      align-items: center;
+      padding: 12px 14px;
+      border-radius: 13px;
+      background: var(--paper);
+    }
+    .priority-item > b:first-child { color: var(--blue); font-size: 12px; }
+    .priority-item span { font-size: 12px; font-weight: 750; }
+    .priority-item em { color: var(--red); font-size: 11px; font-style: normal; font-weight: 900; }
+    .priority-item:nth-child(3) em, .priority-item:nth-child(4) em { color: var(--orange); }
+    .priority-note { margin: 14px 0 0; color: var(--muted); font-size: 11px; }
+    .compare-table { width: 100%; border-collapse: separate; border-spacing: 0; overflow: hidden; font-size: 12px; }
+    .compare-table th, .compare-table td { padding: 11px 12px; border-bottom: 1px solid var(--line); text-align: left; }
+    .compare-table th { color: white; background: var(--blue); font-size: 11px; letter-spacing: .04em; }
+    .compare-table th:first-child { border-radius: 10px 0 0 0; }
+    .compare-table th:last-child { border-radius: 0 10px 0 0; }
+    .compare-table td:first-child { font-weight: 800; }
+    .compare-table tr:last-child td { border-bottom: 0; }
+    .good { color: var(--green); font-weight: 900; }
+    .bad { color: var(--red); font-weight: 900; }
+
+    .case-layout {
+      display: grid;
+      grid-template-columns: .82fr 1.18fr;
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .map-card {
+      min-height: 380px;
+      color: white;
+      background:
+        radial-gradient(circle at 32% 34%, rgba(89,174,255,.35), transparent 18%),
+        linear-gradient(145deg, #0d315f, #1765c1);
+      border: none;
+    }
+
+    .map-card::before,
+    .map-card::after {
+      content: "";
+      position: absolute;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 50%;
+    }
+    .map-card::before { width: 330px; height: 330px; right: -90px; top: -100px; }
+    .map-card::after { width: 170px; height: 170px; left: -40px; bottom: -60px; }
+    .map-card p { color: #d9e9ff; }
+
+    .location-mark {
+      position: absolute;
+      right: 15%;
+      bottom: 18%;
+      width: 84px;
+      height: 84px;
+      border: 20px solid rgba(255,255,255,.10);
+      border-radius: 50% 50% 50% 10%;
+      transform: rotate(-45deg);
+      box-shadow: 0 0 0 1px rgba(255,255,255,.18);
+    }
+    .location-mark::after {
+      content: "";
+      position: absolute;
+      inset: 14px;
+      border-radius: 50%;
+      background: #53e0b6;
+    }
+
+    .case-points { display: grid; gap: 14px; }
+    .point {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 14px;
+      align-items: start;
+      padding: 17px 18px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: white;
+    }
+    .point b { display: block; margin-bottom: 5px; font-size: 15px; }
+    .point p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.45; }
+    .point .num { color: var(--blue); font-weight: 900; font-size: 13px; }
+
+    .swot {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 14px;
+    }
+
+    .swot-card { padding: 20px 24px 19px; min-height: 225px; }
+    .swot-card::before {
+      content: attr(data-letter);
+      position: absolute;
+      right: 16px;
+      top: -17px;
+      color: rgba(16,35,63,.055);
+      font-size: 112px;
+      font-weight: 950;
+      line-height: 1;
+    }
+    .swot-card h3 { display: flex; align-items: center; gap: 10px; }
+    .swot-card h3 span {
+      display: grid;
+      place-items: center;
+      width: 31px;
+      height: 31px;
+      border-radius: 9px;
+      color: white;
+      font-size: 14px;
+    }
+    .swot-card ul, .compact-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 7px 18px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      color: var(--ink);
+      font-size: clamp(12px, .92vw, 15px);
+      line-height: 1.35;
+    }
+    .swot-card li, .compact-list li { position: relative; padding-left: 14px; }
+    .swot-card li::before, .compact-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: .55em;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: .7;
+    }
+    .strength { background: var(--green-soft); border-color: #c7e9de; }
+    .strength h3 span { background: var(--green); }
+    .weakness { background: var(--orange-soft); border-color: #f3d8bf; }
+    .weakness h3 span { background: var(--orange); }
+    .opportunity { background: var(--sky); border-color: #c9defa; }
+    .opportunity h3 span { background: var(--blue); }
+    .threat { background: var(--red-soft); border-color: #f0cad1; }
+    .threat h3 span { background: var(--red); }
+
+    .matrix {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 18px;
+    }
+    .strategy-card { min-height: 205px; }
+    .strategy-card::after {
+      content: attr(data-code);
+      position: absolute;
+      right: 18px;
+      bottom: -15px;
+      color: rgba(21,87,192,.06);
+      font-size: 84px;
+      font-weight: 950;
+    }
+    .strategy-card h3 { color: var(--blue); }
+    .strategy-card .compact-list { grid-template-columns: 1fr; }
+
+    .quote-layout {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 24px;
+    }
+    .quote-card {
+      padding: clamp(28px, 4vw, 60px);
+      color: white;
+      background: linear-gradient(145deg, var(--navy), var(--blue));
+      border: none;
+    }
+    .quote-card small {
+      display: block;
+      margin-bottom: 25px;
+      color: #79e0c4;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .quote-card blockquote {
+      margin: 0;
+      font-size: clamp(24px, 3.2vw, 50px);
+      line-height: 1.2;
+      letter-spacing: -.025em;
+      font-weight: 750;
+    }
+    .quote-card p { margin: 24px 0 0; color: #cfe0f8; }
+    .value-stack { display: grid; gap: 15px; }
+    .value-card { display: grid; grid-template-columns: 42px 1fr; gap: 14px; padding: 18px; }
+    .value-card .icon { margin: 0; }
+    .value-card h3 { margin-bottom: 4px; font-size: 17px; }
+    .value-card p { margin: 0; font-size: 13px; }
+
+    .goal-card {
+      min-height: 380px;
+      display: flex;
+      flex-direction: column;
+    }
+    .goal-card .goal-num {
+      display: inline-block;
+      margin-bottom: 24px;
+      color: var(--blue);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: .12em;
+    }
+    .goal-card h3 { font-size: clamp(21px, 2vw, 30px); }
+    .goal-card .goal-desc { min-height: 70px; }
+    .kpi {
+      margin-top: auto;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+    }
+    .kpi small { display: block; margin-bottom: 9px; color: var(--muted); font-weight: 800; }
+    .kpi strong { color: var(--blue); font-size: clamp(24px, 2.4vw, 38px); letter-spacing: -.03em; }
+    .kpi p { margin: 5px 0 0; font-size: 12px; }
+    .goal-card:nth-child(2) .kpi strong { color: var(--green); }
+    .goal-card:nth-child(3) .kpi strong { color: var(--orange); }
+
+    .roadmap {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: 20px;
+      padding-top: 34px;
+    }
+    .roadmap::before {
+      content: "";
+      position: absolute;
+      left: 6%;
+      right: 6%;
+      top: 12px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--blue), var(--green));
+      border-radius: 3px;
+    }
+    .phase { overflow: visible; min-height: 335px; }
+    .phase::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: -30px;
+      width: 18px;
+      height: 18px;
+      border: 5px solid white;
+      border-radius: 50%;
+      background: var(--blue);
+      box-shadow: 0 0 0 2px var(--blue);
+      transform: translateX(-50%);
+    }
+    .phase:nth-child(4)::before { background: var(--green); box-shadow: 0 0 0 2px var(--green); }
+    .phase .year { color: var(--blue); font-size: 30px; font-weight: 950; }
+    .phase h3 { margin: 12px 0 18px; }
+    .phase .compact-list { grid-template-columns: 1fr; gap: 10px; color: var(--muted); }
+
+    .investment-layout {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 22px;
+    }
+    .budget-card { display: grid; grid-template-columns: 170px 1fr; gap: 26px; align-items: center; }
+    .donut {
+      position: relative;
+      width: 166px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: conic-gradient(var(--blue) 0 31.4%, var(--green) 31.4% 52.8%, var(--orange) 52.8% 67.1%, var(--purple) 67.1% 78.5%, #ee6f7f 78.5% 85.6%, #8da2ba 85.6% 100%);
+    }
+    .donut::after {
+      content: "70 сая ₮";
+      position: absolute;
+      inset: 30px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: var(--navy);
+      background: white;
+      font-size: 20px;
+      font-weight: 950;
+      text-align: center;
+    }
+    .budget-list { display: grid; gap: 9px; }
+    .budget-row { display: grid; grid-template-columns: 10px 1fr auto; gap: 9px; align-items: center; font-size: 12px; }
+    .budget-row i { width: 9px; height: 9px; border-radius: 50%; background: var(--blue); }
+    .budget-row:nth-child(2) i { background: var(--green); }
+    .budget-row:nth-child(3) i { background: var(--orange); }
+    .budget-row:nth-child(4) i { background: var(--purple); }
+    .budget-row:nth-child(5) i { background: #ee6f7f; }
+    .budget-row:nth-child(6) i { background: #8da2ba; }
+    .budget-row b { color: var(--navy); }
+    .risk-list { display: grid; gap: 10px; }
+    .risk-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+    }
+    .risk-item b { display: block; margin-bottom: 3px; font-size: 13px; }
+    .risk-item p { margin: 0; font-size: 11px; }
+    .risk-level { align-self: start; padding: 5px 8px; border-radius: 8px; color: var(--red); background: var(--red-soft); font-size: 10px; font-weight: 900; }
+    .risk-item:nth-child(n+3) .risk-level { color: var(--orange); background: var(--orange-soft); }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+    .scorecard { display: grid; gap: 12px; }
+    .score-row {
+      display: grid;
+      grid-template-columns: 145px 1fr 72px;
+      gap: 14px;
+      align-items: center;
+      padding: 15px 17px;
+      border-radius: 14px;
+      background: var(--paper);
+    }
+    .score-row span { font-size: 13px; font-weight: 800; }
+    .bar { height: 10px; overflow: hidden; border-radius: 10px; background: #dfe7f1; }
+    .bar i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--blue), #53a2ff); }
+    .score-row:nth-child(2) .bar i { background: linear-gradient(90deg, var(--green), #56c7a9); }
+    .score-row:nth-child(3) .bar i { background: linear-gradient(90deg, var(--orange), #ffb15f); }
+    .score-row:nth-child(4) .bar i { background: linear-gradient(90deg, var(--purple), #a98bf3); }
+    .score-row b { text-align: right; color: var(--blue); font-size: 13px; }
+    .note { padding: 24px; background: #0c2c59; color: white; border: none; }
+    .note p { color: #cfdef3; }
+    .note .compact-list { grid-template-columns: 1fr; color: #edf5ff; gap: 12px; }
+
+    .closing {
+      background: linear-gradient(135deg, #f9fbff 0%, #edf5ff 55%, #eaf8f4 100%);
+    }
+    .closing-layout {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 50px;
+      align-items: center;
+    }
+    .closing h2 { font-size: clamp(42px, 6vw, 92px); }
+    .closing h2 span { color: var(--blue); }
+    .takeaway { display: grid; gap: 13px; }
+    .takeaway .point { box-shadow: 0 12px 30px rgba(13,39,78,.07); }
+
+    .controls {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px;
+      border: 1px solid rgba(135,155,180,.25);
+      border-radius: 999px;
+      background: rgba(255,255,255,.88);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(15px);
+      transform: translateX(-50%);
+    }
+    .control-btn {
+      display: grid;
+      place-items: center;
+      width: 40px;
+      height: 40px;
+      border: 0;
+      border-radius: 50%;
+      color: var(--ink);
+      background: transparent;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+    .control-btn:hover { color: white; background: var(--blue); transform: translateY(-1px); }
+    .control-btn:disabled { opacity: .3; cursor: default; transform: none; background: transparent; color: var(--ink); }
+    .counter { min-width: 58px; text-align: center; color: var(--muted); font-size: 12px; font-weight: 850; }
+    .progress {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      z-index: 30;
+      width: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--blue), var(--green));
+      transition: width .35s ease;
+    }
+
+    .help {
+      position: fixed;
+      right: 20px;
+      bottom: 22px;
+      z-index: 20;
+      color: #76879d;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    @media (max-width: 960px), (max-height: 700px) {
+      .slide { padding: 24px 34px 76px; gap: 11px; overflow-y: auto; }
+      .hero-layout, .case-layout, .quote-layout, .dashboard, .closing-layout { grid-template-columns: 1fr 1fr; gap: 18px; }
+      .grid-3 { gap: 12px; }
+      .diagnosis-grid { gap: 10px; }
+      .diagnosis-card { min-height: 210px; }
+      .pestel-grid { gap: 10px; }
+      .pestel-card { min-height: 160px; }
+      .card { padding: 16px; }
+      .fact-card { min-height: 155px; }
+      .swot-card { min-height: 190px; }
+      .swot-card ul { font-size: 11px; }
+      .goal-card { min-height: 300px; }
+      .phase { min-height: 270px; }
+      .footer-tag { left: 34px; }
+    }
+
+    @media (max-width: 720px) {
+      html, body { overflow: auto; background: white; }
+      .deck { height: auto; }
+      .slide {
+        position: relative;
+        display: none;
+        min-height: 100dvh;
+        padding: 24px 20px 92px;
+        overflow: visible;
+      }
+      .slide.active { display: grid; }
+      .hero-layout, .case-layout, .quote-layout, .dashboard, .closing-layout,
+      .grid-2, .grid-3, .grid-4, .fact-grid, .matrix, .roadmap, .diagnosis-grid,
+      .pestel-grid, .priority-layout, .investment-layout, .budget-card { grid-template-columns: 1fr; }
+      .hero-card { display: none; }
+      .swot { grid-template-columns: 1fr; }
+      .swot-card ul { grid-template-columns: 1fr; font-size: 13px; }
+      .roadmap { gap: 14px; padding: 0; }
+      .roadmap::before, .phase::before { display: none; }
+      .phase, .goal-card { min-height: auto; }
+      .goal-desc { min-height: 0 !important; }
+      .score-row { grid-template-columns: 100px 1fr 52px; }
+      .donut { width: 150px; margin: 0 auto; }
+      .help { display: none; }
+    }
+
+    @media print {
+      html, body { height: auto; overflow: visible; background: white; }
+      .deck { height: auto; }
+      .slide {
+        position: relative;
+        display: grid !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+        width: 100%;
+        min-height: 100vh;
+        page-break-after: always;
+      }
+      .controls, .progress, .help { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck" aria-live="polite">
+    <section class="slide hero active" data-title="Нүүр">
+      <div class="slide-head">
+        <div class="brand"><span class="brand-mark"><i></i><i></i><i></i><i></i></span> СЕМИНАРЫН ДААЛГАВАР 01</div>
+        <span class="slide-number">01</span>
+      </div>
+      <div class="content hero-layout">
+        <div>
+          <p class="eyebrow">Байгууллагын орчин • Төлөвлөлт • Стратеги</p>
+          <h1>“Намуун” ХХК-ийн <span>стратегийн шинжилгээ</span></h1>
+          <p class="lead">Орон нутгийн жижиглэн худалдааны бизнесийг тогтвортой өсөлтөд хүргэх SWOT шинжилгээ ба 2022–2025 оны стратегийн чиглэл.</p>
+        </div>
+        <aside class="hero-card">
+          <strong>Өсөлтийн боломж бий. Харин суурь чадавхаа эхэлж шинэчилнэ.</strong>
+          <p>Харилцагчийн итгэл, байршил, хуримтлалыг технологи, үйлчилгээ, нийлүүлэлтийн шинэчлэлтэй холбох нь гол шийдэл.</p>
+          <div class="chips"><span class="chip">Улиастай</span><span class="chip">Жижиглэн худалдаа</span><span class="chip">70 сая ₮</span></div>
+        </aside>
+      </div>
+      <span class="footer-tag">НАМУУН ХХК • СТРАТЕГИЙН УДИРДЛАГА</span>
+    </section>
+
+    <section class="slide" data-title="Кейсийн товч">
+      <div class="slide-head">
+        <div><p class="eyebrow">01 • Кейсийн товч ойлголт</p><h2>Бизнесийн өнөөгийн зураглал</h2></div>
+        <span class="slide-number">02</span>
+      </div>
+      <div class="content case-layout">
+        <article class="card map-card">
+          <div class="icon" style="background:rgba(255,255,255,.12);color:white">⌖</div>
+          <h3>Завхан аймаг, Улиастай хот</h3>
+          <p>Хүнсний болон өргөн хэрэглээний барааны худалдаа. Салбарууд нь хотын баруун, зүүн хэсгийг хамарч, хэрэглэгчдэд ойр байрлалтай.</p>
+          <div class="chips"><span class="chip">Орон нутгийн зах зээл</span><span class="chip">Байнгын хэрэглэгч</span></div>
+          <span class="location-mark" aria-hidden="true"></span>
+        </article>
+        <div class="case-points">
+          <article class="point"><span class="num">01</span><div><b>Туршлага ба итгэл</b><p>Олон жилийн үйл ажиллагаа, тогтсон худалдан авагчдын баазтай.</p></div></article>
+          <article class="point"><span class="num">02</span><div><b>Удирдлагын нөөц</b><p>Захирал Б.Болд бизнесийн удирдлагын мэдлэг, практик туршлагатай.</p></div></article>
+          <article class="point"><span class="num">03</span><div><b>Өсөх хүсэл</b><p>70 сая төгрөгийн хуримтлалтай; бизнесээ өргөжүүлэх, үйлдвэрлэл рүү орох сонирхолтой.</p></div></article>
+          <article class="point"><span class="num">04</span><div><b>Шинэчлэлийн шаардлага</b><p>Барилга, агуулах, касс, технологи ба үйлчилгээний хурдыг сайжруулах хэрэгцээтэй.</p></div></article>
+        </div>
+      </div>
+      <span class="footer-tag">КЕЙСИЙН ӨГӨГДӨЛД ТУЛГУУРЛАВ</span>
+    </section>
+
+    <section class="slide" data-title="Дотоод орчны онош">
+      <div class="slide-head">
+        <div><p class="eyebrow">02 • Дотоод орчны дэлгэрэнгүй шинжилгээ</p><h2>Гол асуудлын шалтгаан ба үр дагавар</h2></div>
+        <span class="slide-number">03</span>
+      </div>
+      <div class="content diagnosis-grid">
+        <article class="card diagnosis-card">
+          <small>НӨӨЦ БА ЧАДАВХ</small><h3>Боломжтой суурь</h3>
+          <ul class="compact-list"><li>70 сая ₮-ийн өөрийн эх үүсвэр</li><li>Туршлагатай удирдлага</li><li>Тогтсон хэрэглэгчийн бааз</li><li>Хоёр бүсийг хамарсан байршил</li></ul>
+        </article>
+        <article class="card diagnosis-card">
+          <small>ҮНДСЭН ШАЛТГААН</small><h3>Процесс шинэчлэгдээгүй</h3>
+          <ul class="compact-list"><li>Касс, бүртгэл гар ажиллагаатай</li><li>Агуулахын зохион байгуулалт сул</li><li>Барааны эрэлтийг датагаар тооцдоггүй</li><li>Үйлчилгээний стандарт тодорхойгүй</li></ul>
+        </article>
+        <article class="card diagnosis-card">
+          <small>ШУУД ҮР ДАГАВАР</small><h3>Орлого алдах эрсдэл</h3>
+          <ul class="compact-list"><li>Кассын дараалал, хүлээлт үүснэ</li><li>Бараа тасрах эсвэл илүүдэл нөөц бий болно</li><li>Хугацаа дуусалт, хорогдол нэмэгдэнэ</li><li>Хэрэглэгч өрсөлдөгч рүү шилжинэ</li></ul>
+        </article>
+        <article class="card diagnosis-card">
+          <small>СТРАТЕГИЙН ЗӨРҮҮ</small><h3>Өсөх хүсэл × сул суурь</h3>
+          <ul class="compact-list"><li>Үйлдвэрлэл рүү шууд орох нь эрсдэлтэй</li><li>Одоогийн салбарын бүтээмж эхэлж өсөх ёстой</li><li>Технологи, хүн, процессийг хамтад нь шинэчилнэ</li><li>Хөрөнгө оруулалтыг үе шаттай хийнэ</li></ul>
+        </article>
+        <div class="thesis"><b>ГОЛ ОНОШ</b><p>Компанид эрэлт, нэр хүнд, хөрөнгө бий. Харин өсөлтийг даах үйл ажиллагааны систем дутмаг тул эхний зорилго нь “шинэ салбар” бус, одоогийн бизнесийн бүтээмж ба хяналтыг сайжруулах явдал.</p></div>
+      </div>
+      <span class="footer-tag">ШИНЖ ТЭМДЭГ: ДАРААЛАЛ • ҮНДСЭН ШАЛТГААН: СИСТЕМГҮЙ ПРОЦЕСС</span>
+    </section>
+
+    <section class="slide" data-title="Гол үзүүлэлт">
+      <div class="slide-head">
+        <div><p class="eyebrow">03 • Нөхцөл байдлын оношилгоо</p><h2>Шийдвэрт нөлөөлөх 4 баримт</h2></div>
+        <span class="slide-number">04</span>
+      </div>
+      <div class="content fact-grid">
+        <article class="card fact-card"><div class="icon">₮</div><span class="metric">70 сая</span><h3>Өөрийн санхүүжилт</h3><p>Шинэчлэлийн эхний үе шатыг гаднын өндөр өргүйгээр эхлүүлэх боломж.</p></article>
+        <article class="card fact-card"><div class="icon">↔</div><span class="metric">2 бүс</span><h3>Хүртээмжтэй байршил</h3><p>Хотын баруун, зүүн хэсгийг хамарсан салбарын давуу байрлал.</p></article>
+        <article class="card fact-card"><div class="icon">⌛</div><span class="metric">1 касс</span><h3>Үйлчилгээний саатал</h3><p>Оргил цагийн дараалал нь туршлага, борлуулалтад шууд сөргөөр нөлөөлнө.</p></article>
+        <article class="card fact-card"><div class="icon">△</div><span class="metric">Өндөр</span><h3>Өрсөлдөөний дарамт</h3><p>“Зул” ХХК өргөн сонголт, үнийн давуу байдлаар зах зээлд өрсөлдөнө.</p></article>
+      </div>
+      <span class="footer-tag">ОНОШ: ЭРЭЛТ БИЙ • ҮЙЛ АЖИЛЛАГААНЫ ЧАДАВХ ХОЦОРЧ БАЙНА</span>
+    </section>
+
+    <section class="slide" data-title="PESTEL шинжилгээ">
+      <div class="slide-head">
+        <div><p class="eyebrow">04 • Гадаад орчны дэлгэрэнгүй шинжилгээ</p><h2>PESTEL: боломж ба дарамтын зураглал</h2></div>
+        <span class="slide-number">05</span>
+      </div>
+      <div class="content pestel-grid">
+        <article class="card pestel-card"><span class="factor">P</span><h3>Төр, бодлого</h3><p>ЖДҮ, орон нутгийн үйлдвэрлэлийг дэмжих хөтөлбөр нь тоног төхөөрөмж, санхүүжилтийн боломж нээнэ.</p><span class="impact">↑ Боломж</span></article>
+        <article class="card pestel-card"><span class="factor" style="background:var(--red)">E</span><h3>Эдийн засаг</h3><p>Худалдан авах чадвар, инфляц, шатахуун ба тээврийн өртөг нь үнэ, ашигт ажиллагаанд шууд нөлөөлнө.</p><span class="impact risk">↓ Өндөр эрсдэл</span></article>
+        <article class="card pestel-card"><span class="factor" style="background:var(--orange)">S</span><h3>Нийгэм, хүн ам</h3><p>Улиастайд төвлөрөх хөдөлгөөн эрэлтийг нэмэх ч аймгаас гадагш шилжилт зах зээлийг агшааж болзошгүй.</p><span class="impact mixed">↕ Холимог</span></article>
+        <article class="card pestel-card"><span class="factor" style="background:var(--purple)">T</span><h3>Технологи</h3><p>POS, НӨАТ, цахим төлбөр, онлайн захиалга нь хурд, хяналт, хэрэглэгчийн мэдээллийг сайжруулна.</p><span class="impact">↑ Боломж</span></article>
+        <article class="card pestel-card"><span class="factor" style="background:var(--green)">E</span><h3>Байгаль, логистик</h3><p>Алслагдсан байршил, цаг агаар, замын нөхцөлөөс шалтгаалсан нийлүүлэлтийн тасалдалд нөөц шаардлагатай.</p><span class="impact risk">↓ Өндөр эрсдэл</span></article>
+        <article class="card pestel-card"><span class="factor" style="background:#63758b">L</span><h3>Хууль, стандарт</h3><p>Хүнсний аюулгүй байдал, хадгалалт, касс ба татварын шаардлага нь агуулахын шинэчлэлийг зайлшгүй болгоно.</p><span class="impact mixed">! Заавал мөрдөх</span></article>
+      </div>
+      <span class="footer-tag">ХАМГИЙН ТОМ БОЛОМЖ: ДИЖИТАЛ СУВАГ • ХАМГИЙН ТОМ ЭРСДЭЛ: ӨРТӨГ БА ЛОГИСТИК</span>
+    </section>
+
+    <section class="slide" data-title="SWOT">
+      <div class="slide-head">
+        <div><p class="eyebrow">05 • SWOT шинжилгээ</p><h2>Дотоод чадавх × Гадаад орчин</h2></div>
+        <span class="slide-number">06</span>
+      </div>
+      <div class="content swot">
+        <article class="card swot-card strength" data-letter="S">
+          <h3><span>S</span> Давуу тал</h3>
+          <ul><li>Байршлын хүртээмж сайн</li><li>Олон жилийн туршлага</li><li>Байнгын хэрэглэгчтэй</li><li>Удирдлагын бизнесийн мэдлэг</li><li>70 сая ₮-ийн хуримтлал</li><li>Өргөжих хүсэл, санаачилга</li></ul>
+        </article>
+        <article class="card swot-card weakness" data-letter="W">
+          <h3><span>W</span> Сул тал</h3>
+          <ul><li>Хуучин барилга, тохижилт</li><li>Агуулахын нөхцөл сул</li><li>Технологийн хэрэглээ муу</li><li>Кассын хүчин чадал бага</li><li>Үйлчилгээ удаан</li><li>Онлайн суваг хөгжөөгүй</li></ul>
+        </article>
+        <article class="card swot-card opportunity" data-letter="O">
+          <h3><span>O</span> Боломж</h3>
+          <ul><li>Улиастайд төвлөрөх хөдөлгөөн</li><li>Шинэ ажлын байр, дэд бүтэц</li><li>ЖДҮ-ийг дэмжих бодлого</li><li>Цахим төлбөр, НӨАТ-ын систем</li><li>Онлайн захиалга, хүргэлт</li><li>Орон нутгийн үйлдвэрлэгчид</li></ul>
+        </article>
+        <article class="card swot-card threat" data-letter="T">
+          <h3><span>T</span> Аюул</h3>
+          <ul><li>“Зул” ХХК-ийн өрсөлдөөн</li><li>Худалдан авах чадварын бууралт</li><li>Тээвэр, шатахууны зардал</li><li>Нийлүүлэлтийн тасалдал</li><li>Хүн амын шилжилт хөдөлгөөн</li><li>Шинэ өрсөлдөгч нэвтрэх</li></ul>
+        </article>
+      </div>
+      <span class="footer-tag">ГОЛ ДҮГНЭЛТ: ДАВУУ ТАЛАА ӨСӨЛТИЙН СУВАГ БОЛГОЖ, СУЛ ТАЛАА ЯАРАЛТАЙ ЗАСНА</span>
+    </section>
+
+    <section class="slide" data-title="Эрэмбэ ба өрсөлдөөн">
+      <div class="slide-head">
+        <div><p class="eyebrow">06 • SWOT-ын тайлбар ба эрэмбэ</p><h2>Юуг түрүүлж шийдэх вэ?</h2></div>
+        <span class="slide-number">07</span>
+      </div>
+      <div class="content priority-layout">
+        <article class="card">
+          <h3>Нөлөөлөл × яаралтай байдлын эрэмбэ</h3>
+          <div class="priority-list">
+            <div class="priority-item"><b>01</b><span>Касс, барааны бүртгэлийн шинэчлэл</span><em>5 / 5</em></div>
+            <div class="priority-item"><b>02</b><span>Нийлүүлэлт ба нөөцийн хяналт</span><em>5 / 5</em></div>
+            <div class="priority-item"><b>03</b><span>Агуулах, хадгалалтын нөхцөл</span><em>5 / 4</em></div>
+            <div class="priority-item"><b>04</b><span>Үйлчилгээний хурд, ур чадвар</span><em>4 / 4</em></div>
+            <div class="priority-item"><b>05</b><span>Онлайн захиалга, хүргэлт</span><em style="color:var(--green)">4 / 3</em></div>
+          </div>
+          <p class="priority-note">* 1–5 оноо нь кейсийн мэдээлэлд тулгуурласан удирдлагын эрэмбийн санал; бодит шийдвэрийн өмнө 3 сарын суурь өгөгдлөөр баталгаажуулна.</p>
+        </article>
+        <article class="card">
+          <h3>“Намуун” ба “Зул” ХХК-ийн харьцуулалт</h3>
+          <table class="compare-table">
+            <thead><tr><th>Хүчин зүйл</th><th>Намуун</th><th>Зул</th><th>Хариу стратеги</th></tr></thead>
+            <tbody>
+              <tr><td>Байршил</td><td class="good">Давуу</td><td>Дунд</td><td>Ойр, хурдан үйлчилгээг онцлох</td></tr>
+              <tr><td>Хэрэглэгчийн итгэл</td><td class="good">Давуу</td><td>Өсөн нэмэгдэх</td><td>Урамшууллаар хадгалах</td></tr>
+              <tr><td>Сонголт</td><td class="bad">Сул</td><td class="good">Давуу</td><td>ABC ангиллаар нэр төрөл нэмэх</td></tr>
+              <tr><td>Үнэ</td><td>Дунд</td><td class="good">Давуу</td><td>Багц үнэ, гол бараанд паритет</td></tr>
+              <tr><td>Үйлчилгээний хурд</td><td class="bad">Сул</td><td>Дунд</td><td>2 дахь касс, стандарт процесс</td></tr>
+              <tr><td>Дижитал суваг</td><td class="bad">Сул</td><td>Тодорхойгүй</td><td>Түрүүлж онлайн сувгийг эзлэх</td></tr>
+            </tbody>
+          </table>
+        </article>
+      </div>
+      <span class="footer-tag">ӨРСӨЛДӨХ АРГА: ҮНЭЭР ДАГАХ БУС • ОЙР, ХУРДАН, НАЙДВАРТАЙ БАЙХ</span>
+    </section>
+
+    <section class="slide" data-title="TOWS стратеги">
+      <div class="slide-head">
+        <div><p class="eyebrow">07 • SWOT-оос стратеги руу</p><h2>Хэрэгжүүлэх дөрвөн чиглэл</h2></div>
+        <span class="slide-number">08</span>
+      </div>
+      <div class="content matrix">
+        <article class="card strategy-card" data-code="SO"><h3>SO — Өсөлтийг хурдасгах</h3><ul class="compact-list"><li>Байршил, хэрэглэгчийн бааздаа тулгуурлан онлайн захиалга нэвтрүүлэх</li><li>Хуримтлалаар салбарын тохижилт, барааны сонголтыг нэмэх</li></ul></article>
+        <article class="card strategy-card" data-code="WO"><h3>WO — Сул талыг шинэчлэх</h3><ul class="compact-list"><li>POS, бараа материал, НӨАТ-ын нэгдсэн систем ашиглах</li><li>ЖДҮ-ийн дэмжлэгээр агуулах, тоног төхөөрөмжөө сайжруулах</li></ul></article>
+        <article class="card strategy-card" data-code="ST"><h3>ST — Давуу талаа хамгаалах</h3><ul class="compact-list"><li>Байнгын хэрэглэгчийн урамшуулал, багц санал хэрэгжүүлэх</li><li>Орон нутгийн нийлүүлэгчтэй урт хугацааны гэрээ байгуулах</li></ul></article>
+        <article class="card strategy-card" data-code="WT"><h3>WT — Эрсдэлийг бууруулах</h3><ul class="compact-list"><li>Нийлүүлэгчээ төрөлжүүлж, гол нэрийн барааны нөөцийн доод түвшин тогтоох</li><li>Алдагдал, хугацаа дуусалт, кассын дарааллыг долоо хоног бүр хянах</li></ul></article>
+      </div>
+      <span class="footer-tag">ЭРЭМБЭ: ҮЙЛ АЖИЛЛАГААНЫ СУУРЬ → ДИЖИТАЛ СУВАГ → ӨРГӨЖИЛТ</span>
+    </section>
+
+    <section class="slide" data-title="Алсын хараа">
+      <div class="slide-head">
+        <div><p class="eyebrow">08 • Чиг баримжаа</p><h2>Эрхэм зорилго ба алсын хараа</h2></div>
+        <span class="slide-number">09</span>
+      </div>
+      <div class="content quote-layout">
+        <article class="card quote-card">
+          <small>Эрхэм зорилго</small>
+          <blockquote>“Орон нутгийн өрх бүрд хэрэгцээт барааг найдвартай, хурдан, ойроос хүргэнэ.”</blockquote>
+          <p><b>Алсын хараа:</b> Завхан аймгийн хамгийн итгэлтэй, технологид суурилсан орон нутгийн худалдаа, үйлдвэрлэлийн сүлжээ болох.</p>
+        </article>
+        <div class="value-stack">
+          <article class="card value-card"><div class="icon">✓</div><div><h3>Итгэл</h3><p>Чанар, үнэ, мэдээлэлд ил тод байна.</p></div></article>
+          <article class="card value-card"><div class="icon">☺</div><div><h3>Хэрэглэгч</h3><p>Хурдан, эелдэг, ойр үйлчилгээг эрхэмлэнэ.</p></div></article>
+          <article class="card value-card"><div class="icon">↗</div><div><h3>Хөгжил</h3><p>Технологи, ур чадварт тогтмол хөрөнгө оруулна.</p></div></article>
+          <article class="card value-card"><div class="icon">∞</div><div><h3>Орон нутаг</h3><p>Үйлдвэрлэгч, ажилтан, нийгэмтэй хамт өснө.</p></div></article>
+        </div>
+      </div>
+      <span class="footer-tag">ҮНЭТ ЗҮЙЛ: ИТГЭЛ • ХҮРТЭЭМЖ • ХУРД • ХАМТЫН ӨСӨЛТ</span>
+    </section>
+
+    <section class="slide" data-title="Стратегийн зорилго">
+      <div class="slide-head">
+        <div><p class="eyebrow">09 • 2022–2025 стратегийн зорилго</p><h2>Голлох 3 зорилго</h2></div>
+        <span class="slide-number">10</span>
+      </div>
+      <div class="content grid-3">
+        <article class="card goal-card">
+          <span class="goal-num">ЗОРИЛГО 01</span><div class="icon">⚙</div><h3>Үйл ажиллагааг шинэчлэх</h3>
+          <p class="goal-desc">Касс, агуулах, бараа материалын хяналтыг стандартчилж, салбарын үйл ажиллагааг хурдлуулах.</p>
+          <div class="kpi"><small>АМЖИЛТЫН ҮЗҮҮЛЭЛТ</small><strong>−50%</strong><p>Оргил цагийн хүлээлгийн хугацаа</p></div>
+        </article>
+        <article class="card goal-card">
+          <span class="goal-num">ЗОРИЛГО 02</span><div class="icon" style="color:var(--green);background:var(--green-soft)">◫</div><h3>Борлуулалтын сувгийг тэлэх</h3>
+          <p class="goal-desc">Онлайн захиалга, хүргэлт, хэрэглэгчийн урамшууллыг нэвтрүүлж давтан худалдан авалтыг өсгөх.</p>
+          <div class="kpi"><small>АМЖИЛТЫН ҮЗҮҮЛЭЛТ</small><strong>+25%</strong><p>Нийт борлуулалтын өсөлт</p></div>
+        </article>
+        <article class="card goal-card">
+          <span class="goal-num">ЗОРИЛГО 03</span><div class="icon" style="color:var(--orange);background:var(--orange-soft)">♜</div><h3>Нийлүүлэлтийг бэхжүүлэх</h3>
+          <p class="goal-desc">Орон нутгийн түншлэл, олон эх үүсвэр, нөөцийн бодлогоор тасалдал ба өртгийн эрсдэлийг бууруулах.</p>
+          <div class="kpi"><small>АМЖИЛТЫН ҮЗҮҮЛЭЛТ</small><strong>≥95%</strong><p>Гол нэрийн барааны бэлэн байдал</p></div>
+        </article>
+      </div>
+      <span class="footer-tag">KPI НЬ САНАЛ БОЛГОСОН ЗОРИЛТОТ ТҮВШИН</span>
+    </section>
+
+    <section class="slide" data-title="Хэрэгжилтийн зураглал">
+      <div class="slide-head">
+        <div><p class="eyebrow">10 • Дунд ба урт хугацаа</p><h2>Хэрэгжилтийн үе шат</h2></div>
+        <span class="slide-number">11</span>
+      </div>
+      <div class="content roadmap">
+        <article class="card phase"><span class="year">2022</span><h3>Суурь шинэчлэл</h3><ul class="compact-list"><li>2 дахь касс, POS систем</li><li>Агуулахын стандарт</li><li>Ажилтны үйлчилгээний сургалт</li></ul></article>
+        <article class="card phase"><span class="year">2023</span><h3>Дижитал суваг</h3><ul class="compact-list"><li>Онлайн захиалга</li><li>Хүргэлтийн туршилт</li><li>Хэрэглэгчийн мэдээллийн сан</li></ul></article>
+        <article class="card phase"><span class="year">2024</span><h3>Өсөлт ба түншлэл</h3><ul class="compact-list"><li>Барааны сонголт нэмэх</li><li>Орон нутгийн нийлүүлэгч</li><li>Урамшууллын хөтөлбөр</li></ul></article>
+        <article class="card phase"><span class="year">2025</span><h3>Төрөлжилт</h3><ul class="compact-list"><li>Үйлдвэрлэлийн ТЭЗҮ</li><li>Шинэ бүтээгдэхүүний туршилт</li><li>Дараагийн салбарын шийдвэр</li></ul></article>
+      </div>
+      <span class="footer-tag">БОГИНО ХУГАЦАА: 0–12 САР • ДУНД: 1–3 ЖИЛ • УРТ: 3+ ЖИЛ</span>
+    </section>
+
+    <section class="slide" data-title="Хөрөнгө оруулалт ба эрсдэл">
+      <div class="slide-head">
+        <div><p class="eyebrow">11 • Санхүүжилтийн хувилбар</p><h2>70 сая ₮-ийг үе шаттай ашиглах санал</h2></div>
+        <span class="slide-number">12</span>
+      </div>
+      <div class="content investment-layout">
+        <article class="card">
+          <h3>Санал болгож буй хөрөнгө оруулалтын бүтэц</h3>
+          <div class="budget-card">
+            <div class="donut" aria-label="Нийт төсөв 70 сая төгрөг"></div>
+            <div class="budget-list">
+              <div class="budget-row"><i></i><span>Дэлгүүр, агуулахын тохижилт</span><b>22 сая</b></div>
+              <div class="budget-row"><i></i><span>POS, касс, бүртгэлийн систем</span><b>15 сая</b></div>
+              <div class="budget-row"><i></i><span>Эргэлтийн хөрөнгө, гол бараа</span><b>10 сая</b></div>
+              <div class="budget-row"><i></i><span>Онлайн захиалга, хүргэлтийн туршилт</span><b>8 сая</b></div>
+              <div class="budget-row"><i></i><span>Сургалт, маркетинг, урамшуулал</span><b>5 сая</b></div>
+              <div class="budget-row"><i></i><span>Эрсдэлийн нөөц</span><b>10 сая</b></div>
+            </div>
+          </div>
+          <p class="priority-note">* Энэ нь стратегийн санал. Нийлүүлэгчийн үнийн санал, мөнгөн урсгалын тооцоогоор эцэслэнэ. Үйлдвэрлэлийн хөрөнгө оруулалтыг одоогийн шинэчлэлийн үр дүн гарсны дараа тусад нь ТЭЗҮ-ээр шийднэ.</p>
+        </article>
+        <article class="card">
+          <h3>Гол эрсдэл ба бууруулах арга</h3>
+          <div class="risk-list">
+            <div class="risk-item"><div><b>Нийлүүлэлт тасалдах</b><p>2+ нийлүүлэгч, 14–21 хоногийн хамгаалалтын нөөц.</p></div><span class="risk-level">ӨНДӨР</span></div>
+            <div class="risk-item"><div><b>Үнийн өрсөлдөөн ширүүсэх</b><p>Гол 20 бараанд үнийн паритет, багц санал, үнэнч хэрэглэгчийн хөтөлбөр.</p></div><span class="risk-level">ӨНДӨР</span></div>
+            <div class="risk-item"><div><b>Систем нэвтрүүлэлт удах</b><p>Нэг салбарт 30 хоног туршиж, дараа нь өргөжүүлэх.</p></div><span class="risk-level">ДУНД</span></div>
+            <div class="risk-item"><div><b>Онлайн захиалга ашиглагдахгүй байх</b><p>Бага зардлын сувгаар туршиж, давтан захиалгаар хэмжих.</p></div><span class="risk-level">ДУНД</span></div>
+          </div>
+        </article>
+      </div>
+      <span class="footer-tag">САНХҮҮГИЙН ЗАРЧИМ: 30 ХОНОГИЙН ТУРШИЛТ → KPI ХЯНАЛТ → ДАРААГИЙН ШАТ</span>
+    </section>
+
+    <section class="slide" data-title="Хяналт">
+      <div class="slide-head">
+        <div><p class="eyebrow">12 • Хяналт ба үнэлгээ</p><h2>Сар бүр хэмжих үзүүлэлтүүд</h2></div>
+        <span class="slide-number">13</span>
+      </div>
+      <div class="content dashboard">
+        <article class="card">
+          <h3>Стратегийн хяналтын самбар</h3>
+          <p>Зорилтыг эхний 3 сарын суурь үзүүлэлттэй харьцуулан шинэчилнэ.</p>
+          <div class="scorecard">
+            <div class="score-row"><span>Борлуулалт</span><div class="bar"><i style="width:75%"></i></div><b>+25%</b></div>
+            <div class="score-row"><span>Барааны бэлэн байдал</span><div class="bar"><i style="width:95%"></i></div><b>≥95%</b></div>
+            <div class="score-row"><span>Кассын хүлээлт</span><div class="bar"><i style="width:50%"></i></div><b>−50%</b></div>
+            <div class="score-row"><span>Давтан худалдан авалт</span><div class="bar"><i style="width:70%"></i></div><b>+15%</b></div>
+          </div>
+        </article>
+        <aside class="card note">
+          <div class="icon" style="background:rgba(255,255,255,.1);color:#7be2c6">!</div>
+          <h3>Удирдлагын 3 дүрэм</h3>
+          <ul class="compact-list"><li>Нэг зорилго бүр нэг хариуцагчтай байна.</li><li>KPI-г сар бүр хянаж, улирал бүр шийдвэр гаргана.</li><li>70 сая ₮-ийг нэг дор бус, үр дүнгээр нь үе шаттай зарцуулна.</li></ul>
+        </aside>
+      </div>
+      <span class="footer-tag">ХЭМЖИХГҮЙ БОЛ УДИРДАЖ ЧАДАХГҮЙ</span>
+    </section>
+
+    <section class="slide closing" data-title="Дүгнэлт">
+      <div class="slide-head">
+        <div class="brand"><span class="brand-mark"><i></i><i></i><i></i><i></i></span> НАМУУН ХХК</div>
+        <span class="slide-number">14</span>
+      </div>
+      <div class="content closing-layout">
+        <div>
+          <p class="eyebrow">13 • Нэгдсэн дүгнэлт</p>
+          <h2>Итгэлийг <span>өсөлт</span> болгох цаг</h2>
+          <p class="lead">“Намуун” ХХК-ийн хамгийн үнэ цэнтэй хөрөнгө бол хэрэглэгчийн итгэл. Үүнийг үйл ажиллагааны шинэчлэл, дижитал суваг, найдвартай нийлүүлэлттэй холбож чадвал өрсөлдөөний давуу тал тогтвортой болно.</p>
+        </div>
+        <div class="takeaway">
+          <article class="point"><span class="num">01</span><div><b>Эхлээд сууриа шинэчил</b><p>Касс, агуулах, систем, хүний ур чадвар.</p></div></article>
+          <article class="point"><span class="num">02</span><div><b>Дараа нь сувгаа тэл</b><p>Онлайн захиалга, хүргэлт, урамшуулал.</p></div></article>
+          <article class="point"><span class="num">03</span><div><b>Эцэст нь төрөлжүүл</b><p>Түншлэл, үйлдвэрлэл, шинэ салбар.</p></div></article>
+        </div>
+      </div>
+      <span class="footer-tag">АНХААРАЛ ХАНДУУЛСАНД БАЯРЛАЛАА</span>
+    </section>
+  </main>
+
+  <nav class="controls" aria-label="Слайдын удирдлага">
+    <button class="control-btn" id="prev" aria-label="Өмнөх слайд" title="Өмнөх (←)">←</button>
+    <span class="counter" id="counter">01 / 14</span>
+    <button class="control-btn" id="next" aria-label="Дараагийн слайд" title="Дараах (→)">→</button>
+    <button class="control-btn" id="fullscreen" aria-label="Дэлгэц дүүргэх" title="Дэлгэц дүүргэх (F)">⛶</button>
+  </nav>
+  <div class="help">← → товчоор удирдана</div>
+  <div class="progress" id="progress"></div>
+
+  <script>
+    const slides = [...document.querySelectorAll('.slide')];
+    const prevButton = document.getElementById('prev');
+    const nextButton = document.getElementById('next');
+    const counter = document.getElementById('counter');
+    const progress = document.getElementById('progress');
+    const fullscreenButton = document.getElementById('fullscreen');
+    let current = 0;
+    let touchStartX = 0;
+
+    function showSlide(index) {
+      const nextIndex = Math.max(0, Math.min(index, slides.length - 1));
+      slides.forEach((slide, i) => {
+        slide.classList.toggle('active', i === nextIndex);
+        slide.classList.toggle('leaving-left', i < nextIndex);
+      });
+      current = nextIndex;
+      counter.textContent = `${String(current + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+      progress.style.width = `${((current + 1) / slides.length) * 100}%`;
+      prevButton.disabled = current === 0;
+      nextButton.disabled = current === slides.length - 1;
+      document.title = `${slides[current].dataset.title} — Намуун ХХК`;
+      history.replaceState(null, '', `#${current + 1}`);
+    }
+
+    prevButton.addEventListener('click', () => showSlide(current - 1));
+    nextButton.addEventListener('click', () => showSlide(current + 1));
+    fullscreenButton.addEventListener('click', () => {
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+      else document.exitFullscreen?.();
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (['ArrowRight', 'PageDown', ' '].includes(event.key)) { event.preventDefault(); showSlide(current + 1); }
+      if (['ArrowLeft', 'PageUp'].includes(event.key)) { event.preventDefault(); showSlide(current - 1); }
+      if (event.key === 'Home') showSlide(0);
+      if (event.key === 'End') showSlide(slides.length - 1);
+      if (event.key.toLowerCase() === 'f') fullscreenButton.click();
+    });
+
+    document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+    document.addEventListener('touchend', e => {
+      const delta = e.changedTouches[0].screenX - touchStartX;
+      if (Math.abs(delta) > 55) showSlide(current + (delta < 0 ? 1 : -1));
+    }, { passive: true });
+
+    const initial = Number(location.hash.replace('#', '')) - 1;
+    showSlide(Number.isFinite(initial) && initial >= 0 ? initial : 0);
+  </script>
+</body>
+</html>
